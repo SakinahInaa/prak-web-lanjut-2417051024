@@ -1,27 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
-    <h1>Daftar Pengguna</h1>
-    <table class="table border">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nama</th>
-                <th>NPM</th>
-                <th>Kelas</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($users as $user)
-            <tr>
-                <td>{{ $user->id }}</td>
-                <td>{{ $user->nama }}</td>
-                <td>{{ $user->nim }}</td>
-                <td>{{ $user->nama_kelas }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h3 class="fw-bold text-dark m-0">Daftar Pengguna</h3>
+        <p class="text-muted small m-0">Seluruh data pengguna dan kelas yang terdaftar dalam sistem.</p>
+    </div>
+    <a href="{{ route('user.create') }}" class="btn btn-star-blue px-4 py-2 rounded-3 fw-semibold shadow-sm">
+        <i class="fa-solid fa-plus me-2"></i>Tambah Pengguna
+    </a>
 </div>
+
+@include('components.user-table', ['users' => $users])
 @endsection

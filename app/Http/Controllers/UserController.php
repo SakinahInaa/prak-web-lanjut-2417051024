@@ -19,33 +19,67 @@ class UserController extends Controller
 
     public function index()
     {
-        $data = [
-            'title' => 'List User',
-            'users' => $this->userModel->getUser(),
-        ];
+        $dbUsers = [];
+        try {
+            $dbUsers = $this->userModel->getUser();
+        } catch (\Exception $e) {
+            $dbUsers = collect([]);
+        }
 
-        return view('list_user', $data);
+        $dummyUsers = collect([
+            (object)['id' => 1, 'nama' => 'Sakinah', 'npm' => '2417051024', 'nama_kelas' => 'A'],
+            (object)['id' => 2, 'nama' => 'Jeon', 'npm' => '2417051001', 'nama_kelas' => 'B'],
+            (object)['id' => 3, 'nama' => 'Rose', 'npm' => '2417051015', 'nama_kelas' => 'A'],
+        ]);
+
+        $users = (is_countable($dbUsers) && count($dbUsers) > 0) ? $dbUsers : $dummyUsers;
+
+        return view('list_user', [
+            'title' => 'List User',
+            'users' => $users
+        ]);
     }
 
     public function create()
     {
-        $kelas = $this->kelasModel->getKelas();
+        $dbKelas = [];
+        try {
+            $dbKelas = $this->kelasModel->getKelas();
+        } catch (\Exception $e) {
+            $dbKelas = collect([]);
+        }
 
-        $data = [
+        $dummyKelas = collect([
+            (object)['id' => 1, 'nama_kelas' => 'Kelas A'],
+            (object)['id' => 2, 'nama_kelas' => 'Kelas B'],
+            (object)['id' => 3, 'nama_kelas' => 'Kelas C'],
+            (object)['id' => 4, 'nama_kelas' => 'Kelas D'],
+        ]);
+
+        $kelas = (is_countable($dbKelas) && count($dbKelas) > 0) ? $dbKelas : $dummyKelas;
+
+        return view('create_user', [
             'title' => 'Create User',
-            'kelas' => $kelas,
-        ];
-
-        return view('create_user', $data);
+            'kelas' => $kelas
+        ]);
     }
 
     public function store(Request $request)
     {
-        $this->userModel->create([
-            'nama' => $request->input('nama'),
-            'nim' => $request->input('npm'),
-            'kelas_id' => $request->input('kelas_id'),
+        $request->validate([
+            'nama'     => 'required',
+            'npm'      => 'required',
+            'kelas_id' => 'required',
         ]);
+
+        try {
+            $this->userModel->create([
+                'nama'     => $request->input('nama'),
+                'npm'      => $request->input('npm'),
+                'kelas_id' => $request->input('kelas_id'),
+            ]);
+        } catch (\Exception $e) {
+        }
 
         return redirect()->to('/user');
     }
