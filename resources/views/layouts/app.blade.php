@@ -1,56 +1,93 @@
 <!DOCTYPE html>
-<html lang="id" class="h-100">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'PWL App' }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>{{ $title ?? 'Academic Portal' }}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
     <style>
-        :root {
-            --star-blue: #548fdc;
-            --star-blue-hover: #1e6ace;
-            --star-blue-light: #e8f0fe;
-        }
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8fafc;
-            color: #1e293b;
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .btn-star-blue {
-            background-color: var(--star-blue);
-            color: #ffffff;
-            border: none;
-            transition: all 0.2s ease;
+
+        .navbar-custom {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-        .btn-star-blue:hover {
-            background-color: var(--star-blue-hover);
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.25);
-        }
-        .text-star-blue { color: var(--star-blue) !important; }
-        .bg-star-blue-light { background-color: var(--star-blue-light) !important; }
+
         .card-custom {
-            border: 1px solid #e2e8f0;
+            border: none;
             border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .bg-star-blue-light {
+            background-color: #eef2ff;
+        }
+
+        .text-star-blue {
+            color: #3b82f6;
+        }
+
+        .btn-star-blue {
+            background-color: #3b82f6;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-star-blue:hover {
+            background-color: #2563eb;
+            color: white;
+            transform: translateY(-2px);
         }
     </style>
 </head>
-<body class="d-flex flex-column h-100">
+<body>
 
-    @include('components.navbar')
-
-    <main class="flex-shrink-0 my-5">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom mb-5">
         <div class="container">
-            @yield('content')
+            <a class="navbar-brand fw-bold" href="{{ route('user.index') }}">
+                <i class="fa-solid fa-graduation-cap me-2"></i>PWL 2417051024
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto gap-2">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('user.index') }}">
+                            <i class="fa-solid fa-clipboard-list me-1"></i> List User
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('user.create') }}">
+                            <i class="fa-solid fa-user-plus me-1"></i> Tambah User
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('matakuliah.index') }}">
+                            <i class="fa-solid fa-book me-1"></i> List Mata Kuliah
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('matakuliah.create') }}">
+                            <i class="fa-solid fa-square-plus me-1"></i> Tambah Mata Kuliah
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </main>
+    </nav>
 
-    @include('components.footer')
+    <div class="container">
+        @yield('content')
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

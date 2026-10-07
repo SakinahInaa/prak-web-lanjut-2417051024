@@ -19,20 +19,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $dbUsers = [];
-        try {
-            $dbUsers = $this->userModel->getUser();
-        } catch (\Exception $e) {
-            $dbUsers = collect([]);
-        }
-
-        $dummyUsers = collect([
-            (object)['id' => 1, 'nama' => 'Sakinah', 'npm' => '2417051024', 'nama_kelas' => 'A'],
-            (object)['id' => 2, 'nama' => 'Jeon', 'npm' => '2417051001', 'nama_kelas' => 'B'],
-            (object)['id' => 3, 'nama' => 'Rose', 'npm' => '2417051015', 'nama_kelas' => 'A'],
-        ]);
-
-        $users = (is_countable($dbUsers) && count($dbUsers) > 0) ? $dbUsers : $dummyUsers;
+        $users = $this->userModel->getUser();
 
         return view('list_user', [
             'title' => 'List User',
@@ -42,21 +29,7 @@ class UserController extends Controller
 
     public function create()
     {
-        $dbKelas = [];
-        try {
-            $dbKelas = $this->kelasModel->getKelas();
-        } catch (\Exception $e) {
-            $dbKelas = collect([]);
-        }
-
-        $dummyKelas = collect([
-            (object)['id' => 1, 'nama_kelas' => 'Kelas A'],
-            (object)['id' => 2, 'nama_kelas' => 'Kelas B'],
-            (object)['id' => 3, 'nama_kelas' => 'Kelas C'],
-            (object)['id' => 4, 'nama_kelas' => 'Kelas D'],
-        ]);
-
-        $kelas = (is_countable($dbKelas) && count($dbKelas) > 0) ? $dbKelas : $dummyKelas;
+        $kelas = Kelas::all();
 
         return view('create_user', [
             'title' => 'Create User',
@@ -69,18 +42,53 @@ class UserController extends Controller
         $request->validate([
             'nama'     => 'required',
             'npm'      => 'required',
-            'kelas_id' => 'required',
+            'kelas_id' => 'required|uuid',
         ]);
 
-        try {
-            $this->userModel->create([
-                'nama'     => $request->input('nama'),
-                'npm'      => $request->input('npm'),
-                'kelas_id' => $request->input('kelas_id'),
-            ]);
-        } catch (\Exception $e) {
-        }
+        UserModel::create([
+            'nama'     => $request->input('nama'),
+            'npm'      => $request->input('npm'),
+            'kelas_id' => $request->input('kelas_id'),
+        ]);
 
-        return redirect()->to('/user');
+        return redirect()->to('/user')->with('success', 'Data user berhasil ditambahkan!');
+    }
+
+    public function edit($id)
+    {
+        $user = UserModel::findOrFail($id);
+        $kelas = Kelas::all();
+
+        return view('edit_user', [
+            'title' => 'Edit User',
+            'user'  => $user,
+            'kelas' => $kelas
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama'     => 'required',
+            'npm'      => 'required',
+            'kelas_id' => 'required|uuid',
+        ]);
+
+        $user = UserModel::findOrFail($id);
+        $user->update([
+            'nama'     => $request->input('nama'),
+            'npm'      => $request->input('npm'),
+            'kelas_id' => $request->input('kelas_id'),
+        ]);
+
+        return redirect()->to('/user')->with('success', 'Data user berhasil diperbarui!');
+    }
+
+    public function destroy($id)
+    {
+        $user = UserModel::findOrFail($id);
+        $user->delete();
+
+        return redirect()->to('/user')->with('success', 'Data user berhasil dihapus!');
     }
 }
